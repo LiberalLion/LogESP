@@ -40,9 +40,12 @@ class SentryMgrCore:
     def load_rule_types(self):
         """Load all sentry rule types"""
         for ruletype in sorted(ruletype_list):
-            self.rule_types[ruletype] = \
-                    __import__('daemons.sentry.rules.' + ruletype + '.core',
-                            globals(), locals(), ['sentry'])
+            self.rule_types[ruletype] = __import__(
+                f'daemons.sentry.rules.{ruletype}.core',
+                globals(),
+                locals(),
+                ['sentry'],
+            )
 
 
     def start_rule_types(self):
@@ -75,7 +78,7 @@ class SentryMgrCore:
         except KeyboardInterrupt:
             exit(0)
         except Exception as err:
-            msg = 'LogESP core sentry thread crashing. Error: ' + str(err)
+            msg = f'LogESP core sentry thread crashing. Error: {str(err)}'
             syslog.syslog(syslog.LOG_ERR, msg)
 
     

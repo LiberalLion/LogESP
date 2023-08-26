@@ -23,78 +23,65 @@
 
 def get_blank_entry():
     """Return a blank entry dictionary"""
-    # Create empty entry:
-    entry = {}
-
-    entry['date_stamp'] = ''
-    entry['time_zone'] = ''
-    entry['event_type'] = ''
-    entry['raw_text'] = ''
-    entry['facility'] = None
-    entry['severity'] = None
-    entry['log_source'] = ''
-    entry['aggregated_events'] = 1
-    entry['source_host'] = ''
-    entry['source_port'] = ''
-    entry['source_process'] = ''
-    entry['action'] = ''
-    entry['command'] = ''
-    entry['source_pid'] = None
-    entry['dest_host'] = ''
-    entry['dest_port'] = ''
-    entry['protocol'] = ''
-    entry['packet_count'] = None
-    entry['byte_count'] = None
-    entry['tcp_flags'] = None
-    entry['class_of_service'] = None
-    entry['interface'] = ''
-    entry['status'] = ''
-    entry['start_time'] = ''
-    entry['duration'] = ''
-    entry['source_user'] = ''
-    entry['target_user'] = ''
-    entry['sessionid'] = ''
-    entry['path'] = ''
-    entry['parameters'] = ''
-    entry['referrer'] = ''
-    entry['message'] = ''
-    entry['ext0'] = ''
-    entry['ext1'] = ''
-    entry['ext2'] = ''
-    entry['ext3'] = ''
-    entry['ext4'] = ''
-    entry['ext5'] = ''
-    entry['ext6'] = ''
-    entry['ext7'] = ''
-
-    return entry
+    return {
+        'date_stamp': '',
+        'time_zone': '',
+        'event_type': '',
+        'raw_text': '',
+        'facility': None,
+        'severity': None,
+        'log_source': '',
+        'aggregated_events': 1,
+        'source_host': '',
+        'source_port': '',
+        'source_process': '',
+        'action': '',
+        'command': '',
+        'source_pid': None,
+        'dest_host': '',
+        'dest_port': '',
+        'protocol': '',
+        'packet_count': None,
+        'byte_count': None,
+        'tcp_flags': None,
+        'class_of_service': None,
+        'interface': '',
+        'status': '',
+        'start_time': '',
+        'duration': '',
+        'source_user': '',
+        'target_user': '',
+        'sessionid': '',
+        'path': '',
+        'parameters': '',
+        'referrer': '',
+        'message': '',
+        'ext0': '',
+        'ext1': '',
+        'ext2': '',
+        'ext3': '',
+        'ext4': '',
+        'ext5': '',
+        'ext6': '',
+        'ext7': '',
+    }
 
 def check_entry(entry):
     """Sanity check entry fields for length, type"""
     # Convert integer fields:
     entry['aggregated_events'] = int(entry['aggregated_events'])
-    if entry['facility']:
-        entry['facility'] = int(entry['facility'])
-    else: entry['facility'] = None
-    if entry['severity']:
-        entry['severity'] = int(entry['severity'])
-    else: entry['severity'] = None
-    if entry['source_pid']:
-        entry['source_pid'] = int(entry['source_pid'])
-    else: entry['source_pid'] = None
+    entry['facility'] = int(entry['facility']) if entry['facility'] else None
+    entry['severity'] = int(entry['severity']) if entry['severity'] else None
+    entry['source_pid'] = int(entry['source_pid']) if entry['source_pid'] else None
     if entry['packet_count']:
         entry['packet_count'] = int(entry['packet_count'])
     else: entry['packet_count'] = None
-    if entry['byte_count']:
-        entry['byte_count'] = int(entry['byte_count'])
-    else: entry['byte_count'] = None
-    if entry['tcp_flags']:
-        entry['tcp_flags'] = int(entry['tcp_flags'])
-    else: entry['tcp_flags'] = None
+    entry['byte_count'] = int(entry['byte_count']) if entry['byte_count'] else None
+    entry['tcp_flags'] = int(entry['tcp_flags']) if entry['tcp_flags'] else None
     if entry['class_of_service']:
         entry['class_of_service'] = int(entry['class_of_service'])
     else: entry['class_of_service'] = None
-    
+
     # Truncate fields to avoid errors:
     if len(entry['date_stamp']) > 32:
         entry['date_stamp'] = entry['date_stamp'][:32]

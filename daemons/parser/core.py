@@ -52,8 +52,7 @@ class ParseCore:
         self.plist = []
 
         for sec in config.sections():
-            p = {}
-            p['filename'] = config.get(sec, 'filename')
+            p = {'filename': config.get(sec, 'filename')}
             p['event_type'] = config.get(sec, 'event_type')
             p['local_lifespan_days'] = int(config.get(
                 sec, 'local_lifespan_days'))
@@ -103,7 +102,7 @@ class ParseCore:
                         isAlive=True
                     else:
                         msg = 'LogESP parser thread for file ' + \
-                                thread.name + ' has crashed'
+                                    thread.name + ' has crashed'
                         syslog.syslog(syslog.LOG_CRIT, msg)
                 if not isAlive:
                     msg = 'LogESP is not parsing any files'
@@ -113,7 +112,7 @@ class ParseCore:
         except KeyboardInterrupt:
             pass
         except Exception as err:
-            msg = 'LogESP core parser thread crashing. Error: ' + str(err)
+            msg = f'LogESP core parser thread crashing. Error: {str(err)}'
             syslog.syslog(syslog.LOG_ERR, msg)
 
 

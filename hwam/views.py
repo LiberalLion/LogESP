@@ -25,8 +25,7 @@ class OUIndexView(ListView):
 
     def get_queryset(self):
         """Return a list of parent-less organizational units"""
-        parents = OrganizationalUnit.objects.filter(parent_ou=None)
-        return parents
+        return OrganizationalUnit.objects.filter(parent_ou=None)
 
 class HWIndexView(ListView):
     model = HardwareAsset
@@ -48,10 +47,9 @@ class HWSearchView(ListView):
     def get_queryset(self):
         filter_val = self.request.GET.get('filter')
         if filter_val and filter_val != '':
-            new_context = HardwareAsset.objects.filter(
+            return HardwareAsset.objects.filter(
                 name=filter_val,
             )
-            return new_context
         else:
             return HardwareAsset.objects.all()
     def get_context_data(self, **kwargs):
@@ -72,10 +70,7 @@ class SWIndexView(ListView):
             parent_hardware=None).order_by('org_unit')
         c = SoftwareAsset.objects.filter(
             parent_hardware=None).order_by('org_unit')
-        if len(p) + len(c) > 0:
-            return (p, c)
-        else:
-            return None
+        return (p, c) if len(p) + len(c) > 0 else None
 
 class SWSearchView(ListView):
     model = SoftwareAsset
@@ -86,10 +81,9 @@ class SWSearchView(ListView):
     def get_queryset(self):
         filter_val = self.request.GET.get('filter')
         if filter_val and filter_val != '':
-            new_context = SoftwareAsset.objects.filter(
+            return SoftwareAsset.objects.filter(
                 name=filter_val,
             )
-            return new_context
         else:
             return SoftwareAsset.objects.all()
     def get_context_data(self, **kwargs):

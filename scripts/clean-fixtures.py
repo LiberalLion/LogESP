@@ -42,8 +42,9 @@ class CleanFixtureCore:
     def get_args(self):
         """Set argument options"""
 
-        self.arg_parser.add_argument('--version', action = 'version',
-                version = '%(prog)s ' + str(__version__))
+        self.arg_parser.add_argument(
+            '--version', action='version', version=f'%(prog)s {str(__version__)}'
+        )
         self.arg_parser.add_argument('files',
                 metavar='FILE', nargs = '*',
                 help = ('set a file from which to erase primary keys'))
@@ -58,10 +59,7 @@ class CleanFixtureCore:
         for fi in self.args.files:
             with open(fi, 'r') as f:
                 content = f.readlines()
-            newcontent = []
-            for line in content:
-                if not rex.match(line):
-                    newcontent.append(line)
+            newcontent = [line for line in content if not rex.match(line)]
             with open(fi, 'w') as f:
                 f.write(''.join(newcontent))
 

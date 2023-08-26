@@ -33,7 +33,7 @@ class ParseModule:
             parsehost, helpertype=None):
         """Initialize a parsing module"""
         self.parser = LogEventParser.objects.get(name=parser)
-        self.regex_format = re.compile(r'{}'.format(self.parser.match_regex))
+        self.regex_format = re.compile(f'{self.parser.match_regex}')
 
         self.native_fields = {'parsed_at', 'time_zone', 'parsed_on',
                 'source_path', 'event_type', 'eol_date_local',
@@ -44,8 +44,7 @@ class ParseModule:
         self.parse_host = parsehost
 
         if self.parser.backup_match_regex:
-            self.backup_regex_format = re.compile(
-                    r'{}'.format(self.parser.backup_match_regex))
+            self.backup_regex_format = re.compile(f'{self.parser.backup_match_regex}')
         else:
             self.backup_regex_format = None
         self.fields = self.parser.fields.split(',')
@@ -64,10 +63,7 @@ class ParseModule:
             helperobjects = []
         self.parsehelpers = []
         for h in helperobjects:
-            helper = {}
-            helper['name'] = h.name
-            helper['regex_format'] = re.compile(
-                    r'{}'.format(h.match_regex))
+            helper = {'name': h.name, 'regex_format': re.compile(f'{h.match_regex}')}
             helper['fields'] = h.fields.split(',')
             self.parsehelpers.append(helper)
 
@@ -98,19 +94,18 @@ class ParseModule:
             linelist = list(zip(fields, match[0]))
 
             for f, v in linelist:
-                if not f in self.native_fields:
+                if f not in self.native_fields:
                     entry[f] = v
 
         # Parse helpers:
         for h in self.parsehelpers:
-            extmatch = re.findall(h['regex_format'], line)
-            if extmatch:
+            if extmatch := re.findall(h['regex_format'], line):
                 if isinstance(extmatch[0], str):
                     entry[h['fields'][0]] = extmatch[0]
                 else:
                     extlist = list(zip(h['fields'], extmatch[0]))
                     for f, v in extlist:
-                        if not f in self.native_fields:
+                        if f not in self.native_fields:
                             entry[f] = v
 
         entry = daemons.parser.utils.check_entry(entry)

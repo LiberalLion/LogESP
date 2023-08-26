@@ -7,7 +7,7 @@ from risk.choices import *
 
 def validate_scale_range(value):
     if not 0 < value <= 100:
-        raise ValidationError('%s not in 1-100 range' % value)
+        raise ValidationError(f'{value} not in 1-100 range')
 
 class VulnerabilityClass(models.Model):
     name = models.CharField(max_length=30)

@@ -7,7 +7,7 @@ from siem.choices import *
 
 def validate_modifier_range(value):
     if not 0 < value <= 10:
-        raise ValidationError('%s not in 0.1-10 range' % value)
+        raise ValidationError(f'{value} not in 0.1-10 range')
 
 class LogEventParser(models.Model):
     name = models.CharField(max_length=32)

@@ -52,29 +52,23 @@ class SentryCore:
                 rules = ListRule.objects.all()
                 connsuccess = True
             except ListRule.DoesNotExist:
-                msg = 'LogESP sentry thread for list rule ' + self.rule.name + \
-                        ' exiting. Rule no longer exists.'
+                msg = f'LogESP sentry thread for list rule {self.rule.name} exiting. Rule no longer exists.'
                 exit(0)
             except Exception:
                 if dbtries == 20:
                     db.connections.close_all()
-                    msg = 'LogESP parser thread for ' + filename + \
-                            ' got a db error. Resetting conn. ' + \
-                            'Event: ' + str(ourline[:160]) + \
-                            '... Error: ' + str(err)
+                    msg = f'LogESP parser thread for {filename} got a db error. Resetting conn. Event: {str(ourline[:160])}... Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                 elif dbtries == 0:
                     dbtries = 20
-                    msg = 'LogESP sentry thread for ' + self.rule.name + \
-                            ' got 20 db errors while retrieving rules. ' + \
-                            'Error: ' + str(err)
+                    msg = f'LogESP sentry thread for {self.rule.name} got 20 db errors while retrieving rules. Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                     exit(1)
                 else:
                     sleep(0.2)
                 dbtries -= 1
         for r in rules:
-            if not r.id in self.rules:
+            if r.id not in self.rules:
                 self.newrules.append(r)
         self.rules = [r.id for r in rules]
         

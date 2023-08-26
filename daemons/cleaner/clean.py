@@ -27,9 +27,9 @@ from siem.models import LogEvent, RuleEvent
 
 def clean(local=False):
     """Delete EOL events"""
+    dbtries = 20
+    connsuccess = False
     if local:
-        connsuccess = False
-        dbtries = 20
         while not connsuccess:
             try:
                 logevents = LogEvent.objects.filter(
@@ -39,8 +39,7 @@ def clean(local=False):
             except Exception:
                 if dbtries == 0:
                     dbtries = 20
-                    msg = 'LogESP cleaner got 20 db errors. Error: ' + \
-                            str(err)
+                    msg = f'LogESP cleaner got 20 db errors. Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                 dbtries -= 1
                 sleep(0.2)
@@ -55,14 +54,11 @@ def clean(local=False):
             except Exception:
                 if dbtries == 0:
                     dbtries = 20
-                    msg = 'LogESP cleaner got 20 db errors. Error: ' + \
-                            str(err)
+                    msg = f'LogESP cleaner got 20 db errors. Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                 dbtries -= 1
                 sleep(0.2)
     else:
-        connsuccess = False
-        dbtries = 20
         while not connsuccess:
             try:
                 logevents = LogEvent.objects.filter(
@@ -72,8 +68,7 @@ def clean(local=False):
             except Exception:
                 if dbtries == 0:
                     dbtries = 20
-                    msg = 'LogESP cleaner got 20 db errors. Error: ' + \
-                            str(err)
+                    msg = f'LogESP cleaner got 20 db errors. Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                 dbtries -= 1
                 sleep(0.2)
@@ -88,12 +83,11 @@ def clean(local=False):
             except Exception:
                 if dbtries == 0:
                     dbtries = 20
-                    msg = 'LogESP cleaner got 20 db errors. Error: ' + \
-                            str(err)
+                    msg = f'LogESP cleaner got 20 db errors. Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                 dbtries -= 1
                 sleep(0.2)
-    
+
     for e in logevents:
         connsuccess = False
         dbtries = 20
@@ -104,8 +98,7 @@ def clean(local=False):
             except Exception:
                 if dbtries == 0:
                     dbtries = 20
-                    msg = 'LogESP cleaner got 20 db errors. Error: ' + \
-                            str(err)
+                    msg = f'LogESP cleaner got 20 db errors. Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                 dbtries -= 1
                 sleep(0.2)
@@ -119,8 +112,7 @@ def clean(local=False):
             except Exception:
                 if dbtries == 0:
                     dbtries = 20
-                    msg = 'LogESP cleaner got 20 db errors. Error: ' + \
-                            str(err)
+                    msg = f'LogESP cleaner got 20 db errors. Error: {str(err)}'
                     syslog.syslog(syslog.LOG_ERR, msg)
                 dbtries -= 1
                 sleep(0.2)
